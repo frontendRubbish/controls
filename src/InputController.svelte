@@ -12,34 +12,34 @@
     const now = Date.now();
     let delta = now - then;
  
-  if (delta > fpsInterval) {
-    then = now - (delta % fpsInterval);
-    gamepad = getGamepad();
-    if (gamepad) {
-      inputStatus.set({
-        up: checkButton(gamepad, 12),
-        right:  checkButton(gamepad, 15),
-        down:  checkButton(gamepad, 13),
-        left: checkButton(gamepad, 14),
-        buttonA: checkButton(gamepad, 0),
-        buttonB: checkButton(gamepad, 1),
-        buttonX: checkButton(gamepad, 2),
-        buttonY: checkButton(gamepad, 3),
-      });
+    if (delta > fpsInterval) {
+      then = now - (delta % fpsInterval);
+      gamepad = getGamepad();
+      if (gamepad) {
+        inputStatus.set({
+          up: checkButton(gamepad, 12),
+          right:  checkButton(gamepad, 15),
+          down:  checkButton(gamepad, 13),
+          left: checkButton(gamepad, 14),
+          buttonA: checkButton(gamepad, 0),
+          buttonB: checkButton(gamepad, 1),
+          buttonX: checkButton(gamepad, 2),
+          buttonY: checkButton(gamepad, 3),
+        });
+      }
     }
+    requestAnimationFrame(gameLoop)
   }
-  requestAnimationFrame(gameLoop)
-}
 
-function checkButton(gamepad: Gamepad, buttonIdx: number): boolean {
-  let button = gamepad.buttons[buttonIdx];
-  return button.pressed;
-}
+  function checkButton(gamepad: Gamepad, buttonIdx: number): boolean {
+    let button = gamepad.buttons[buttonIdx];
+    return button.pressed;
+  }
 
-function getGamepad(): Gamepad {
-  const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-  return gamepads[0]
-}
+  function getGamepad(): Gamepad {
+    const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+    return gamepads[0]
+  }
 
   function connecthandler(event): void {
     gamepad = event.gamepad;

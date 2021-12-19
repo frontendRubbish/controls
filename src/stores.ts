@@ -1,4 +1,4 @@
-import { writable, readable, derived } from 'svelte/store';
+import { writable } from 'svelte/store';
 import type { InputStatus } from './types/input.status';
 
 const initialInputStatus: InputStatus = {
@@ -13,3 +13,5 @@ const initialInputStatus: InputStatus = {
 }
 
 export const inputStatus = writable(initialInputStatus);
+
+export const activeSection = writable(0);
