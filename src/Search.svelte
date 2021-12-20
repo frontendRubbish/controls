@@ -1,30 +1,52 @@
 <script lang="ts">
   import { tick } from 'svelte';
-  import { activeSection, inputStatus } from './stores.js';
+
+  import { activeSection, delayShort, inputStatus } from './stores.js';
 
   import type { InputStatus } from './types/input.status.js';
 
-  async function checkInput(inputStatus: InputStatus): Promise<void> {
-    if (inputStatus.down && $activeSection === 0) {
+  let inputBlocked = false;
+  let blocker: NodeJS.Timeout;
+
+  async function checkInput(inputStatus: InputStatus):Promise<void> {
+    if (inputStatus.down && $activeSection === 0 && !inputBlocked) {
       await tick();
       activeSection.set(1);
     }
   }
 
+  function blockNavigation(activeSection: number): void {
+    if (activeSection === 0) {
+      inputBlocked = true;
+      blocker = setTimeout( () => inputBlocked = false, $delayShort);
+    }
+  }
+
   $: checkInput($inputStatus);
+  $: blockNavigation($activeSection);
 
 </script>
 
-<section class:active="{$activeSection === 0}">
-  Suche
+<section class="section" class:active="{$activeSection === 0}">
+  <div class="section__content">
+    <h2 class="section__headline">Suche</h2>
+  </div>
 </section>
 
 <style>
-  section {
+  .section {
     border: 1px solid black;
     height: 200px;
     margin: 20px 0;
-    width: 1024px;
+  }
+
+  .section__content {
+    background: radial-gradient(circle, rgba(2,2,2,0.1) 0%, rgba(2,2,2,0.2) 100%);
+    height: 100%;
+  }
+
+  .section__headline {
+    margin: 0 0 32px;
   }
 
   .active {

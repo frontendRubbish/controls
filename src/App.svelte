@@ -16,14 +16,8 @@
 
 <style>
 	main {
-		text-align: center;
-		padding: 1em;
+		width: 100%;
 		margin: 0 auto;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
+		max-width: 1440px;
 	}
 </style>
