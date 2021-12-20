@@ -9,6 +9,16 @@ import css from 'rollup-plugin-css-only';
 
 const production = !process.env.ROLLUP_WATCH;
 
+const preprocess = sveltePreprocess({
+	sourceMap: !production,
+  scss: {
+    includePaths: ['src'],
+  },
+  postcss: {
+    plugins: [require('autoprefixer')],
+  },
+});
+
 function serve() {
 	let server;
 
@@ -40,7 +50,7 @@ export default {
 	},
 	plugins: [
 		svelte({
-			preprocess: sveltePreprocess({ sourceMap: !production }),
+			preprocess,
 			compilerOptions: {
 				// enable run-time checks when not in production
 				dev: !production
