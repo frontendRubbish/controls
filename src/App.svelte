@@ -1,17 +1,15 @@
 <script lang="ts">
 	import InputController from './InputController.svelte';
-	import Search from './Search.svelte';
-	import Products from './Products.svelte';
-	import Checkout from './Checkout.svelte';
-
+	import Section from './Section.svelte';
 </script>
 
 <main>
 	<InputController />
-	<Search />
-	<Products />
-	<Checkout />
-
+	<Section sectionIdx={0} title={'Suche'}>
+		<input type="text" />
+	</Section>
+	<Section sectionIdx={1} title={'Produkte'}/>
+	<Section sectionIdx={2} title={'Checkout'}/>
 </main>
 
 <style>
