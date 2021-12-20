@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { readable, writable } from 'svelte/store';
 import type { InputStatus } from './types/input.status';
 
 const initialInputStatus: InputStatus = {
@@ -15,3 +15,5 @@ const initialInputStatus: InputStatus = {
 export const inputStatus = writable(initialInputStatus);
 
 export const activeSection = writable(0);
+
+export const delayShort = readable(200);

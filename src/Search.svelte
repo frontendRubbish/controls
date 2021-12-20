@@ -1,17 +1,29 @@
 <script lang="ts">
   import { tick } from 'svelte';
-  import { activeSection, inputStatus } from './stores.js';
+
+  import { activeSection, delayShort, inputStatus } from './stores.js';
 
   import type { InputStatus } from './types/input.status.js';
 
-  async function checkInput(inputStatus: InputStatus): Promise<void> {
-    if (inputStatus.down && $activeSection === 0) {
+  let inputBlocked = false;
+  let blocker: NodeJS.Timeout;
+
+  async function checkInput(inputStatus: InputStatus):Promise<void> {
+    if (inputStatus.down && $activeSection === 0 && !inputBlocked) {
       await tick();
       activeSection.set(1);
     }
   }
 
+  function blockNavigation(activeSection: number): void {
+    if (activeSection === 0) {
+      inputBlocked = true;
+      blocker = setTimeout( () => inputBlocked = false, $delayShort);
+    }
+  }
+
   $: checkInput($inputStatus);
+  $: blockNavigation($activeSection);
 
 </script>
 
