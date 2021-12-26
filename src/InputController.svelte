@@ -32,7 +32,7 @@
   }
 
   function checkButton(gamepad: Gamepad, buttonIdx: number): boolean {
-    let button = gamepad.buttons[buttonIdx];
+    const button = gamepad.buttons[buttonIdx];
     return button.pressed;
   }
 
@@ -97,13 +97,14 @@
 
 <style>
   .controller-view {
-    border: 1px solid black;
+    background-color: rgba(255,255,255,0.4);
     display: flex;
-    height: 120px;
+    height: 90px;
     position: fixed;
     width: 240px;
     right: 0;
-    top: 0;
+    bottom: 0;
+    border-radius: 20px;
   }
 
   .direction-display {
@@ -115,9 +116,10 @@
   }
 
   .control {
-    background-color: grey;
+    background-color: rgba(20,20,20,1);
+    border-radius: 100%;
     height: 20px;
-    margin: 10px;
+    margin: 5px 10px;
     width: 20px;
   }
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { tick } from 'svelte';
-  import { activeSection, delayShort, inputStatus } from './stores.js';
+  import { activeSection, delayShort, inputStatus, sectionNavigationActive } from './stores.js';
 
   import type { InputStatus } from './types/input.status.js';
 
@@ -11,7 +11,7 @@
   let blocker: NodeJS.Timeout;
 
   async function checkInput(inputStatus: InputStatus):Promise<void> {
-    if ($activeSection === sectionIdx && !inputBlocked) {
+    if ($activeSection === sectionIdx && !inputBlocked && $sectionNavigationActive) {
       if (inputStatus.down) {
         await tick();
         activeSection.set(sectionIdx < 2 ? sectionIdx + 1 : 0);

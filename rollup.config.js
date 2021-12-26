@@ -3,21 +3,13 @@ import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
-import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
 
+const createPreprocessors = require('./svelte.config').createPreprocessors;
 const production = !process.env.ROLLUP_WATCH;
 
-const preprocess = sveltePreprocess({
-	sourceMap: !production,
-  scss: {
-    includePaths: ['src'],
-  },
-  postcss: {
-    plugins: [require('autoprefixer')],
-  },
-});
+const preprocess = createPreprocessors(!production);
 
 function serve() {
 	let server;
