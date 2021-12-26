@@ -15,5 +15,6 @@ const initialInputStatus: InputStatus = {
 export const inputStatus = writable(initialInputStatus);
 
 export const activeSection = writable(0);
+export const sectionNavigationActive = writable(true);
 
 export const delayShort = readable(200);

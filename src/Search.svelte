@@ -1,55 +1,94 @@
 <script lang="ts">
-  import { tick } from 'svelte';
-
-  import { activeSection, delayShort, inputStatus } from './stores.js';
+  import { tick, onMount } from 'svelte';
+  import { activeSection, sectionNavigationActive, inputStatus } from './stores.js';
 
   import type { InputStatus } from './types/input.status.js';
 
-  let inputBlocked = false;
-  let blocker: NodeJS.Timeout;
+  export let sectionIdx: number;
+
+  const keyLines = [
+    ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+    ['Y', 'X', 'C', 'V', 'B', 'N', 'M']
+  ];
+
+  let keyboardBlocked = false;
+  let keyboardBlocker: NodeJS.Timeout;
+  let keyboardActive = false;
+
+
+  let searchInput: HTMLInputElement;
 
   async function checkInput(inputStatus: InputStatus):Promise<void> {
-    if (inputStatus.down && $activeSection === 0 && !inputBlocked) {
+    if ($activeSection !== sectionIdx && searchInput) {
       await tick();
-      activeSection.set(1);
+      searchInput.blur();
+      keyboardActive = false;
+    } else if (inputStatus.buttonA && !keyboardActive) {
+      await tick();
+      keyboardActive = true;
+      sectionNavigationActive.set(false);
+    } else if (inputStatus.buttonB && keyboardActive) {
+      await tick();
+      keyboardActive = false;
+      sectionNavigationActive.set(true);
     }
   }
 
   function blockNavigation(activeSection: number): void {
-    if (activeSection === 0) {
-      inputBlocked = true;
-      blocker = setTimeout( () => inputBlocked = false, $delayShort);
+    if (activeSection === sectionIdx && searchInput) {
+      searchInput.focus();
     }
   }
 
   $: checkInput($inputStatus);
   $: blockNavigation($activeSection);
 
+  onMount(() => {
+    if ($activeSection === sectionIdx) {
+      searchInput.focus();
+    }
+  });
+
 </script>
 
-<section class="section" class:active="{$activeSection === 0}">
-  <div class="section__content">
-    <h2 class="section__headline">Suche</h2>
+<input type="text" bind:this={searchInput} />
+
+{#if keyboardActive}
+  <div class="keyboard">
+    {#each keyLines as line}
+      <div class="keyboard__row">
+        {#each line as keyButton}
+          <button class="keyboard__btn">
+            {keyButton}
+          </button>
+        {/each}
+      </div>
+    {/each}
   </div>
-</section>
+{/if}
 
-<style>
-  .section {
-    border: 1px solid black;
-    height: 200px;
-    margin: 20px 0;
+<style type="text/scss">
+  @import './sass/vars';
+  
+  .keyboard {
+    border: 1px solid white;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+
+    &__row {
+      display: flex;
+      justify-content: center;
+    }
+
+    &__btn {
+      align-items: center;
+      display: flex;
+      height: 40px;
+      justify-content: center;
+      width: 40px;
+    }
   }
 
-  .section__content {
-    background: radial-gradient(circle, rgba(2,2,2,0.1) 0%, rgba(2,2,2,0.2) 100%);
-    height: 100%;
-  }
-
-  .section__headline {
-    margin: 0 0 32px;
-  }
-
-  .active {
-    border-color: red;
-  }
 </style>
