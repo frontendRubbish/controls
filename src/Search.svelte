@@ -1,6 +1,11 @@
 <script lang="ts">
   import { tick, onMount } from 'svelte';
-  import { activeSection, sectionNavigationActive, inputStatus, delayShort } from './stores.js';
+  import {
+    activeSection,
+    sectionNavigationActive,
+    inputStatus,
+    delayShort,
+  } from './stores.js';
 
   import type { InputStatus } from './types/input.status.js';
 
@@ -9,7 +14,7 @@
   const keyLines = [
     ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-    ['Y', 'X', 'C', 'V', 'B', 'N', 'M']
+    ['Y', 'X', 'C', 'V', 'B', 'N', 'M'],
   ];
 
   let keyboardBlocked = false;
@@ -21,7 +26,7 @@
   let searchInput: HTMLInputElement;
   let searchTerm = '';
 
-  async function checkInput(inputStatus: InputStatus):Promise<void> {
+  async function checkInput(inputStatus: InputStatus): Promise<void> {
     if ($activeSection !== sectionIdx && searchInput) {
       searchInput.blur();
       activateKeyboard(false);
@@ -37,7 +42,7 @@
     } else if (inputStatus.up && keyboardActive && !keyboardBlocked) {
       blockKeyboard();
       await tick();
-      keyboardY --;
+      keyboardY--;
       if (keyboardY < 0) {
         keyboardY = keyLines.length - 1;
       }
@@ -45,7 +50,7 @@
     } else if (inputStatus.down && keyboardActive && !keyboardBlocked) {
       blockKeyboard();
       await tick();
-      keyboardY ++;
+      keyboardY++;
       if (keyboardY === keyLines.length) {
         keyboardY = 0;
       }
@@ -53,36 +58,35 @@
     } else if (inputStatus.left && keyboardActive && !keyboardBlocked) {
       blockKeyboard();
       await tick();
-      keyboardX --;
+      keyboardX--;
       if (keyboardX < 0) {
         keyboardX = keyLines[keyboardY].length - 1;
       }
-    } 
-    else if (inputStatus.right && keyboardActive && !keyboardBlocked) {
+    } else if (inputStatus.right && keyboardActive && !keyboardBlocked) {
       blockKeyboard();
       await tick();
-      keyboardX ++;
+      keyboardX++;
       if (keyboardX === keyLines[keyboardY].length) {
         keyboardX = 0;
       }
-    } 
+    }
   }
 
-  async function activateKeyboard(active: boolean):Promise<void> {
+  async function activateKeyboard(active: boolean): Promise<void> {
     await tick();
-      keyboardActive = active;
-      sectionNavigationActive.set(!active);
+    keyboardActive = active;
+    sectionNavigationActive.set(!active);
   }
 
   function adjustColIndex(): void {
     if (keyboardX >= keyLines[keyboardY].length) {
-        keyboardX = keyLines[keyboardY].length - 1;
-      }
+      keyboardX = keyLines[keyboardY].length - 1;
+    }
   }
 
   function blockKeyboard(): void {
     keyboardBlocked = true;
-    keyboardBlocker = setTimeout( () => keyboardBlocked = false, $delayShort);
+    keyboardBlocker = setTimeout(() => (keyboardBlocked = false), $delayShort);
   }
 
   function setActive(activeSection: number): void {
@@ -97,7 +101,6 @@
   onMount(() => {
     setActive($activeSection);
   });
-
 </script>
 
 <input type="text" bind:this={searchInput} bind:value={searchTerm} />
@@ -107,7 +110,11 @@
     {#each keyLines as line, rowIndex}
       <div class="keyboard__row">
         {#each line as keyButton, colIndex}
-          <button class="keyboard__btn" class:keyboard__btn--active="{rowIndex === keyboardY && colIndex === keyboardX}">
+          <button
+            class="keyboard__btn"
+            class:keyboard__btn--active={rowIndex === keyboardY &&
+              colIndex === keyboardX}
+          >
             {keyButton}
           </button>
         {/each}
@@ -118,7 +125,7 @@
 
 <style type="text/scss">
   @import './sass/vars';
-  
+
   .keyboard {
     border: 1px solid white;
     position: absolute;
@@ -132,7 +139,7 @@
 
     &__btn {
       align-items: center;
-      background-color: rgba(0,0,0, 0.8);
+      background-color: rgba(0, 0, 0, 0.8);
       color: $white;
       display: flex;
       height: 40px;
@@ -146,5 +153,4 @@
       }
     }
   }
-
 </style>
