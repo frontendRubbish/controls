@@ -5,6 +5,7 @@
     sectionNavigationActive,
     inputStatus,
     delayShort,
+    searchTerm,
   } from './stores.js';
 
   import type { InputStatus } from './types/input.status.js';
@@ -12,6 +13,7 @@
   export let sectionIdx: number;
 
   const keyLines = [
+    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
     ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
     ['Y', 'X', 'C', 'V', 'B', 'N', 'M'],
@@ -24,7 +26,6 @@
   let keyboardActive = false;
 
   let searchInput: HTMLInputElement;
-  let searchTerm = '';
 
   async function checkInput(inputStatus: InputStatus): Promise<void> {
     if ($activeSection !== sectionIdx && searchInput) {
@@ -36,7 +37,7 @@
     } else if (inputStatus.buttonA && keyboardActive && !keyboardBlocked) {
       blockKeyboard();
       await tick();
-      searchTerm += keyLines[keyboardY][keyboardX];
+      searchTerm.set($searchTerm + keyLines[keyboardY][keyboardX]);
     } else if (inputStatus.buttonB && keyboardActive) {
       activateKeyboard(false);
     } else if (inputStatus.up && keyboardActive && !keyboardBlocked) {
@@ -103,7 +104,7 @@
   });
 </script>
 
-<input type="text" bind:this={searchInput} bind:value={searchTerm} />
+<input type="text" bind:this={searchInput} bind:value={$searchTerm} />
 
 {#if keyboardActive}
   <div class="keyboard">

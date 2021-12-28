@@ -1,16 +1,23 @@
 <script lang="ts">
+  import { fade } from 'svelte/transition';
   import { tick, onMount } from 'svelte';
   import productData from './data/products.js';
+  import { searchTerm } from './stores.js';
 
   export let sectionIdx: number;
 
-  onMount(() => {});
+  $: shownProducts =
+    $searchTerm.length > 2
+      ? productData.filter(
+          (product) => product.Name.toUpperCase().indexOf($searchTerm) >= 0
+        )
+      : productData;
 </script>
 
 <div class="product-view">
   <div class="product-view__inner">
-    {#each productData as product (product.ProductId)}
-      <div class="product-view__tile">
+    {#each shownProducts as product (product.ProductId)}
+      <div class="product-view__tile" transition:fade>
         <strong>{product.Name}</strong>
         <div class="product-view__image-container">
           <img class="product-view__image" src={product.PictureUrl} />
