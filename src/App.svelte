@@ -2,6 +2,7 @@
 	import InputController from './InputController.svelte';
 	import Section from './Section.svelte';
 	import Search from './Search.svelte';
+	import ProductDisplay from './ProductDisplay.svelte';
 </script>
 
 <main>
@@ -9,8 +10,10 @@
 	<Section sectionIdx={0} title={'Suche'}>
 		<Search sectionIdx={0} />
 	</Section>
-	<Section sectionIdx={1} title={'Produkte'}/>
-	<Section sectionIdx={2} title={'Checkout'}/>
+	<Section sectionIdx={1} title={'Produkte'}>
+		<ProductDisplay sectionIdx={1} />
+	</Section>
+	<Section sectionIdx={2} title={'Checkout'} />
 </main>
 
 <style>

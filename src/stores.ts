@@ -18,3 +18,5 @@ export const activeSection = writable(0);
 export const sectionNavigationActive = writable(true);
 
 export const delayShort = readable(200);
+
+export const searchTerm = writable('');
