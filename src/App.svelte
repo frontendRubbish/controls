@@ -16,10 +16,12 @@
 	<Section sectionIdx={2} title={'Checkout'} />
 </main>
 
-<style>
+<style type="text/scss" global>
+  @import './sass/vars';
+	@import './sass/global';
+	
 	main {
 		width: 100%;
-		margin: 0 auto;
-		max-width: 1440px;
+		padding: 0 16px;
 	}
 </style>

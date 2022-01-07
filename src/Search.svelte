@@ -23,7 +23,7 @@
     ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
     ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
     ['K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'],
-    ['U', 'V', 'W', 'X', 'Y', 'Z', '-', ' '],
+    ['U', 'V', 'W', 'X', 'Y', 'Z', '-', ' ', 'ᐊ'],
   ];
 
   let keyboardBlocked = false;
@@ -42,9 +42,14 @@
       blockKeyboard();
       activateKeyboard(true);
     } else if (inputStatus.buttonA && keyboardActive && !keyboardBlocked) {
+      const selectedChar = keyLines[keyboardY][keyboardX]
       blockKeyboard();
       await tick();
-      searchTerm.set($searchTerm + keyLines[keyboardY][keyboardX]);
+      if (selectedChar === 'ᐊ' && $searchTerm.length > 0) {
+        searchTerm.set($searchTerm.substr(0, $searchTerm.length - 1));
+      } else {
+        searchTerm.set($searchTerm + selectedChar);
+      }
     } else if (inputStatus.buttonB && keyboardActive) {
       activateKeyboard(false);
     } else if (inputStatus.up && keyboardActive && !keyboardBlocked) {

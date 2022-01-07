@@ -6,6 +6,8 @@
 
   export let sectionIdx: number;
 
+  let activeIndex = 0;
+
   $: shownProducts =
     $searchTerm.length > 2
       ? productData.filter(
@@ -16,11 +18,22 @@
 
 <div class="product-view">
   <div class="product-view__inner">
-    {#each shownProducts as product (product.ProductId)}
-      <div class="product-view__tile" transition:fade>
-        <strong>{product.Name}</strong>
+    {#each shownProducts as product, idx (product.ProductId)}
+      <div class="product-view__tile" class:product-view__tile--active={activeIndex === idx} transition:fade>
+        <strong class="product-view__title">{product.Name}</strong>
         <div class="product-view__image-container">
           <img class="product-view__image" src={product.PictureUrl} />
+        </div>
+        <p class="product-view__description">
+          {product.ShortDescription}
+        </p>
+        <div>
+          <span class="product-view__price">
+            {product.Price} 
+          </span>
+          <span>
+            {product.CurrencyCode}
+          </span>
         </div>
       </div>
     {/each}
@@ -35,14 +48,22 @@
 
     &__inner {
       display: flex;
-      height: 300px;
+    }
+
+    &__title {
+      display: block;
+      margin-bottom: 16px;
     }
 
     &__tile {
       flex: 0 0 300px;
-      height: 300px;
+      border: 1px solid transparent;
       padding: 20px;
       width: 300px;
+
+      &--active {
+        border-color: $white;
+      }
     }
 
     &__image-container {
@@ -53,8 +74,13 @@
     }
 
     &__image {
+      height: 100%;
       width: 100%;
       max-width: 100%;
+    }
+
+    &__price {
+      font-size: 24px;
     }
   }
 </style>

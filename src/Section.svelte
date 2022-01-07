@@ -57,7 +57,7 @@
     box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
       rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
     margin-bottom: 8px;
-    transition: margin 0.2s, box-shadow 0.2s;
+    transition: margin 0.1s, box-shadow 0.1s;
   }
 
   .section__content {
