@@ -8,6 +8,7 @@
 
   let inputBlocked = false;
   let activeIndex = 0;
+  let positionIndex = 0;
   let blocker: NodeJS.Timeout;
 
   async function checkInput(inputStatus: InputStatus): Promise<void> {
@@ -29,23 +30,46 @@
     blocker = setTimeout(() => (inputBlocked = false), $delayShort);
   }
 
-  $: shownProducts =
-    $searchTerm.length > 2
+  function computePosition(activeIndex): string {
+    if (activeIndex < positionIndex) {
+      positionIndex --;
+    } else if (activeIndex > positionIndex + 5) {
+      positionIndex ++;
+    }
+    return ( -314.666666667 * positionIndex ) + 'px';
+  }
+
+  function equals(a, b): boolean {    
+    a.length === b.length &&
+    a.every((v, i) => v === b[i]);
+  }
+
+  function filterProducts(searchTerm): Products {
+    const newProducts = searchTerm.length > 2
       ? productData.filter(
-          (product) => product.Name.toUpperCase().indexOf($searchTerm) >= 0
+          (product) => product.Name.toUpperCase().indexOf(searchTerm) >= 0
         )
       : productData;
+    
+    activeIndex = 0;
+    return newProducts;
+  }
+
+  $: shownProducts = filterProducts($searchTerm);
 
   $: checkInput($inputStatus);
+
+  $: sliderPosition = computePosition(activeIndex);
+
 </script>
 
 <div class="product-view">
-  <div class="product-view__inner">
+  <div class="product-view__inner" style="transform: translateX({sliderPosition});">
     {#each shownProducts as product, idx (product.ProductId)}
       <div class="product-view__tile" class:product-view__tile--active={activeIndex === idx} transition:fade>
         <strong class="product-view__title">{product.Name}</strong>
         <div class="product-view__image-container">
-          <img class="product-view__image" src={product.PictureUrl} />
+          <img class="product-view__image" src={product.PictureUrl} alt={product.Name} />
         </div>
         <p class="product-view__description">
           {product.ShortDescription}
@@ -71,6 +95,7 @@
 
     &__inner {
       display: flex;
+      transition: transform 0.25s;
     }
 
     &__title {
@@ -79,10 +104,10 @@
     }
 
     &__tile {
-      flex: 0 0 300px;
+      flex: 0 0 314.6666666666667px;
       border: 1px solid transparent;
       padding: 20px;
-      width: 300px;
+      width: 314.6666666666667px;
 
       &--active {
         border-color: $white;
