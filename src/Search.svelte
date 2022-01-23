@@ -26,10 +26,10 @@
     ['U', 'V', 'W', 'X', 'Y', 'Z', '-', ' ', 'ᐊ'],
   ];
 
-  let keyboardBlocked = false;
+  let inputBlocked = false;
   let keyboardX = 0;
   let keyboardY = 0;
-  let keyboardBlocker: NodeJS.Timeout;
+  let blocker: NodeJS.Timeout;
   let keyboardActive = false;
 
   let searchInput: HTMLInputElement;
@@ -39,11 +39,11 @@
       searchInput.blur();
       activateKeyboard(false);
     } else if (inputStatus.buttonA && !keyboardActive) {
-      blockKeyboard();
+      blockInput();
       activateKeyboard(true);
-    } else if (inputStatus.buttonA && keyboardActive && !keyboardBlocked) {
+    } else if (inputStatus.buttonA && keyboardActive && !inputBlocked) {
       const selectedChar = keyLines[keyboardY][keyboardX]
-      blockKeyboard();
+      blockInput();
       await tick();
       if (selectedChar === 'ᐊ' && $searchTerm.length > 0) {
         searchTerm.set($searchTerm.substr(0, $searchTerm.length - 1));
@@ -52,31 +52,31 @@
       }
     } else if (inputStatus.buttonB && keyboardActive) {
       activateKeyboard(false);
-    } else if (inputStatus.up && keyboardActive && !keyboardBlocked) {
-      blockKeyboard();
+    } else if (inputStatus.up && keyboardActive && !inputBlocked) {
+      blockInput();
       await tick();
       keyboardY--;
       if (keyboardY < 0) {
         keyboardY = keyLines.length - 1;
       }
       adjustColIndex();
-    } else if (inputStatus.down && keyboardActive && !keyboardBlocked) {
-      blockKeyboard();
+    } else if (inputStatus.down && keyboardActive && !inputBlocked) {
+      blockInput();
       await tick();
       keyboardY++;
       if (keyboardY === keyLines.length) {
         keyboardY = 0;
       }
       adjustColIndex();
-    } else if (inputStatus.left && keyboardActive && !keyboardBlocked) {
-      blockKeyboard();
+    } else if (inputStatus.left && keyboardActive && !inputBlocked) {
+      blockInput();
       await tick();
       keyboardX--;
       if (keyboardX < 0) {
         keyboardX = keyLines[keyboardY].length - 1;
       }
-    } else if (inputStatus.right && keyboardActive && !keyboardBlocked) {
-      blockKeyboard();
+    } else if (inputStatus.right && keyboardActive && !inputBlocked) {
+      blockInput();
       await tick();
       keyboardX++;
       if (keyboardX === keyLines[keyboardY].length) {
@@ -97,9 +97,9 @@
     }
   }
 
-  function blockKeyboard(): void {
-    keyboardBlocked = true;
-    keyboardBlocker = setTimeout(() => (keyboardBlocked = false), $delayShort);
+  function blockInput(): void {
+    inputBlocked = true;
+    blocker = setTimeout(() => (inputBlocked = false), $delayShort);
   }
 
   function setActive(activeSection: number): void {

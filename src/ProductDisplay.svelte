@@ -2,11 +2,32 @@
   import { fade } from 'svelte/transition';
   import { tick, onMount } from 'svelte';
   import productData from './data/products.js';
-  import { searchTerm } from './stores.js';
+  import { delayShort, searchTerm, inputStatus, activeSection } from './stores.js';
 
   export let sectionIdx: number;
 
+  let inputBlocked = false;
   let activeIndex = 0;
+  let blocker: NodeJS.Timeout;
+
+  async function checkInput(inputStatus: InputStatus): Promise<void> {
+    if ($activeSection === sectionIdx && !inputBlocked) {
+      if (inputStatus.left && activeIndex > 0) {
+        blockInput();
+        await tick();
+        activeIndex--; 
+      } else if (inputStatus.right && activeIndex < (shownProducts.length - 1) ) {
+        blockInput();
+        await tick();
+        activeIndex++; 
+      }
+    }
+  }
+  
+  function blockInput(): void {
+    inputBlocked = true;
+    blocker = setTimeout(() => (inputBlocked = false), $delayShort);
+  }
 
   $: shownProducts =
     $searchTerm.length > 2
@@ -14,6 +35,8 @@
           (product) => product.Name.toUpperCase().indexOf($searchTerm) >= 0
         )
       : productData;
+
+  $: checkInput($inputStatus);
 </script>
 
 <div class="product-view">

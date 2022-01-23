@@ -32,7 +32,7 @@
     }
   }
 
-  function blockNavigation(activeSection: number): void {
+  function blockInput(activeSection: number): void {
     if (activeSection === sectionIdx) {
       inputBlocked = true;
       blocker = setTimeout(() => (inputBlocked = false), $delayShort);
@@ -40,7 +40,7 @@
   }
 
   $: checkInput($inputStatus);
-  $: blockNavigation($activeSection);
+  $: blockInput($activeSection);
 </script>
 
 <section class="section" class:section--active={$activeSection === sectionIdx}>
