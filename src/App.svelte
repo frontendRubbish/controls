@@ -16,7 +16,7 @@
   <Section sectionIdx={2} title={'Checkout'} />
 </main>
 
-<style type="text/scss" global>
+<style lang="scss" global>
   @import './sass/vars';
   @import './sass/global';
 
