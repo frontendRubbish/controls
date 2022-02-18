@@ -1,13 +1,7 @@
 <script lang="ts">
   import Keyboard from './Keyboard.svelte';
   import { tick, onMount } from 'svelte';
-  import {
-    activeSection,
-    sectionNavigationActive,
-    inputStatus,
-    delayShort,
-    searchTerm,
-  } from './stores.js';
+  import { activeSection, sectionNavigationActive, inputStatus, delayShort, searchTerm } from './stores.js';
 
   import type { InputStatus } from './types/input.status.js';
 
@@ -28,7 +22,7 @@
       activateKeyboard(true);
     } else if (inputStatus.buttonB && keyboardActive) {
       activateKeyboard(false);
-    } 
+    }
   }
 
   async function activateKeyboard(active: boolean): Promise<void> {
@@ -56,12 +50,17 @@
   });
 </script>
 
-<input type="text" bind:this={searchInput} bind:value={$searchTerm} />
+<input type="text" bind:this={searchInput} bind:value={$searchTerm} class="search-input" />
 
 {#if keyboardActive}
-  <Keyboard keyboardActive="{keyboardActive}" />
+  <Keyboard {keyboardActive} />
 {/if}
 
 <style lang="scss">
   @import './sass/vars';
+
+  .search-input {
+    height: 40px;
+    width: 50%;
+  }
 </style>

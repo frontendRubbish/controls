@@ -1,3 +1,5 @@
+@import './vars';
+
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
 /* Document
@@ -35,9 +37,8 @@ html, body {
 }
 
 body {
-	/* background-color: white; */
-	background-color: rgba(36, 38, 43, 1); 
-	color:  rgba(160, 167, 182, 1);
+	background-color: $dark;
+	color: $font-dark;
 	margin: 0;
 	font-family: 'Quicksand', sans-serif;
 }

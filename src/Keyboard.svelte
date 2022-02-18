@@ -1,10 +1,6 @@
 <script lang="ts">
   import { tick, onMount } from 'svelte';
-  import {
-    inputStatus,
-    delayShort,
-    searchTerm,
-  } from './stores.js';
+  import { inputStatus, delayShort, searchTerm } from './stores.js';
 
   import type { InputStatus } from './types/input.status.js';
 
@@ -31,9 +27,9 @@
 
   async function checkInput(inputStatus: InputStatus): Promise<void> {
     await tick();
-  
+
     if (inputStatus.buttonA && keyboardActive && !inputBlocked) {
-      const selectedChar = keyLines[keyboardY][keyboardX]
+      const selectedChar = keyLines[keyboardY][keyboardX];
       blockInput();
       if (selectedChar === 'ᐊ') {
         if ($searchTerm.length > 0) {
@@ -90,16 +86,11 @@
   });
 </script>
 
-
 <div class="keyboard">
   {#each keyLines as line, rowIndex}
     <div class="keyboard__row">
       {#each line as keyButton, colIndex}
-        <button
-          class="keyboard__btn"
-          class:keyboard__btn--active={rowIndex === keyboardY &&
-          colIndex === keyboardX}
-        >
+        <button class="keyboard__btn" class:keyboard__btn--active={rowIndex === keyboardY && colIndex === keyboardX}>
           {keyButton}
         </button>
       {/each}

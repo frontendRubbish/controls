@@ -18,38 +18,37 @@
       if (inputStatus.left && activeIndex > 0) {
         blockInput();
         await tick();
-        activeIndex--; 
-      } else if (inputStatus.right && activeIndex < (shownProducts.length - 1) ) {
+        activeIndex--;
+      } else if (inputStatus.right && activeIndex < shownProducts.length - 1) {
         blockInput();
         await tick();
-        activeIndex++; 
+        activeIndex++;
       }
     }
   }
-  
+
   function blockInput(): void {
     inputBlocked = true;
     blocker = setTimeout(() => (inputBlocked = false), $delayShort);
   }
 
   function computePosition(activeIndex): string {
-    if (activeIndex < (positionIndex - 1) ) {
+    if (activeIndex < positionIndex - 1) {
       positionIndex = activeIndex;
-    } else if (activeIndex === positionIndex -1 ) {
-      positionIndex --;
+    } else if (activeIndex === positionIndex - 1) {
+      positionIndex--;
     } else if (activeIndex > positionIndex + 5) {
-      positionIndex ++;
+      positionIndex++;
     }
-    return ( -314.666666667 * positionIndex ) + 'px';
+    return -314.666666667 * positionIndex + 'px';
   }
 
   function filterProducts(searchTerm): Products {
-    const newProducts = searchTerm.length > 2
-      ? productData.filter(
-          (product) => product.Name.toUpperCase().indexOf(searchTerm) >= 0
-        )
-      : productData;
-    
+    const newProducts =
+      searchTerm.length > 2
+        ? productData.filter((product) => product.Name.toUpperCase().indexOf(searchTerm) >= 0)
+        : productData;
+
     activeIndex = 0;
     return newProducts;
   }
@@ -59,13 +58,16 @@
   $: checkInput($inputStatus);
 
   $: sliderPosition = computePosition(activeIndex);
-
 </script>
 
 <div class="product-view">
   <div class="product-view__inner" style="transform: translateX({sliderPosition});">
     {#each shownProducts as product, idx (product.ProductId)}
-      <div class="product-view__tile" class:product-view__tile--active={activeIndex === idx && $activeSection === sectionIdx} transition:fade>
+      <div
+        class="product-view__tile"
+        class:product-view__tile--active={activeIndex === idx && $activeSection === sectionIdx}
+        transition:fade
+      >
         <strong class="product-view__title">{product.Name}</strong>
         <div class="product-view__image-container">
           <img class="product-view__image" src={product.PictureUrl} alt={product.Name} />
@@ -75,7 +77,7 @@
         </p>
         <div>
           <span class="product-view__price">
-            {product.Price} 
+            {product.Price}
           </span>
           <span>
             {product.CurrencyCode}
