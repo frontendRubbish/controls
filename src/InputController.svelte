@@ -2,24 +2,24 @@
   import { inputStatus } from './stores.js';
 
   import { onMount } from 'svelte';
-  
-  const fps = 60
-  const fpsInterval = 1000 / fps
+
+  const fps = 60;
+  const fpsInterval = 1000 / fps;
   let gamepad: Gamepad;
   let then = 0;
 
   function gameLoop(): void {
     const now = Date.now();
     let delta = now - then;
- 
+
     if (delta > fpsInterval) {
       then = now - (delta % fpsInterval);
       gamepad = getGamepad();
       if (gamepad) {
         inputStatus.set({
           up: checkButton(gamepad, 12),
-          right:  checkButton(gamepad, 15),
-          down:  checkButton(gamepad, 13),
+          right: checkButton(gamepad, 15),
+          down: checkButton(gamepad, 13),
           left: checkButton(gamepad, 14),
           buttonA: checkButton(gamepad, 0),
           buttonB: checkButton(gamepad, 1),
@@ -28,7 +28,7 @@
         });
       }
     }
-    requestAnimationFrame(gameLoop)
+    requestAnimationFrame(gameLoop);
   }
 
   function checkButton(gamepad: Gamepad, buttonIdx: number): boolean {
@@ -38,7 +38,7 @@
 
   function getGamepad(): Gamepad {
     const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-    return gamepads[0]
+    return gamepads[0];
   }
 
   function connecthandler(event): void {
@@ -50,54 +50,35 @@
   }
 
   onMount(() => {
-    addConnectListener();   
+    addConnectListener();
     then = Date.now();
     requestAnimationFrame(gameLoop);
   });
-
 </script>
 
 <div class="controller-view">
   <div class="direction-display">
-    <div class="{ $inputStatus.up ? 'control control--active': 'control' }">
-
-    </div>
+    <div class={$inputStatus.up ? 'control control--active' : 'control'} />
     <div style="display: flex;">
-      <div class="{ $inputStatus.left ? 'control control--active': 'control' }">
-      
-      </div>
-      <div class="{ $inputStatus.right ? 'control control--active': 'control' }">
-        
-      </div>
-      
+      <div class={$inputStatus.left ? 'control control--active' : 'control'} />
+      <div class={$inputStatus.right ? 'control control--active' : 'control'} />
     </div>
-    <div class="{ $inputStatus.down ? 'control control--active': 'control' }">
-      
-    </div>
+    <div class={$inputStatus.down ? 'control control--active' : 'control'} />
   </div>
 
   <div class="direction-display">
-    <div class="{ $inputStatus.buttonY ? 'control control--active': 'control control--yellow' }">
-
-    </div>
+    <div class={$inputStatus.buttonY ? 'control control--active' : 'control control--yellow'} />
     <div style="display: flex;">
-      <div class="{ $inputStatus.buttonX ? 'control control--active': 'control control--blue' }">
-      
-      </div>
-      <div class="{ $inputStatus.buttonB ? 'control control--active': 'control control--red' }">
-        
-      </div>
-      
+      <div class={$inputStatus.buttonX ? 'control control--active' : 'control control--blue'} />
+      <div class={$inputStatus.buttonB ? 'control control--active' : 'control control--red'} />
     </div>
-    <div class="{ $inputStatus.buttonA ? 'control control--active': 'control control--green' }">
-      
-    </div>
+    <div class={$inputStatus.buttonA ? 'control control--active' : 'control control--green'} />
   </div>
 </div>
 
 <style>
   .controller-view {
-    background-color: rgba(255,255,255,0.4);
+    background-color: rgba(255, 255, 255, 0.4);
     display: flex;
     height: 90px;
     position: fixed;
@@ -116,7 +97,7 @@
   }
 
   .control {
-    background-color: rgba(20,20,20,1);
+    background-color: rgba(20, 20, 20, 1);
     border-radius: 100%;
     height: 20px;
     margin: 5px 10px;
