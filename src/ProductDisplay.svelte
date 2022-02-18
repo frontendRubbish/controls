@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { tick } from 'svelte';
   import { fade } from 'svelte/transition';
-  import { tick, onMount } from 'svelte';
   import productData from './data/products.js';
   import { delayShort, searchTerm, inputStatus, activeSection } from './stores.js';
+  import type { InputStatus } from './types/input.status.js';
+  import type { Products } from './types/product.js';
 
   export let sectionIdx: number;
 
@@ -31,17 +33,14 @@
   }
 
   function computePosition(activeIndex): string {
-    if (activeIndex < positionIndex) {
+    if (activeIndex < (positionIndex - 1) ) {
+      positionIndex = activeIndex;
+    } else if (activeIndex === positionIndex -1 ) {
       positionIndex --;
     } else if (activeIndex > positionIndex + 5) {
       positionIndex ++;
     }
     return ( -314.666666667 * positionIndex ) + 'px';
-  }
-
-  function equals(a, b): boolean {    
-    a.length === b.length &&
-    a.every((v, i) => v === b[i]);
   }
 
   function filterProducts(searchTerm): Products {
@@ -66,7 +65,7 @@
 <div class="product-view">
   <div class="product-view__inner" style="transform: translateX({sliderPosition});">
     {#each shownProducts as product, idx (product.ProductId)}
-      <div class="product-view__tile" class:product-view__tile--active={activeIndex === idx} transition:fade>
+      <div class="product-view__tile" class:product-view__tile--active={activeIndex === idx && $activeSection === sectionIdx} transition:fade>
         <strong class="product-view__title">{product.Name}</strong>
         <div class="product-view__image-container">
           <img class="product-view__image" src={product.PictureUrl} alt={product.Name} />
@@ -87,7 +86,7 @@
   </div>
 </div>
 
-<style type="text/scss">
+<style lang="scss">
   @import './sass/vars';
 
   .product-view {
