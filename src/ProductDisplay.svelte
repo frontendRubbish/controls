@@ -67,9 +67,8 @@
   }
 
   async function checkButtonFocus(displayLayer, activeIndex): Promise<void> {
-    console.log(ctaButton, displayLayer);
+    await tick();
     if (displayLayer) {
-      await tick();
       ctaButton.focus();
     } 
   }
@@ -192,15 +191,23 @@
     }
 
     &__cta {
+      bottom: 16px;
+      position: absolute;
       display: flex;
       height: 40px;
       align-items: center;
+      justify-content: space-between;
+      width: calc(100% - 32px);
     }
 
     &__button {
       height: 40px;
       margin-left: 16px;
       width: 200px;
+
+      &:focus {
+        box-shadow: rgba(70, 70, 150, 0.15) 0px 2px 20px 0px, rgba(25, 25, 25, 0.05) 0px 1px 5px 0px;
+      }
     }
   }
 
