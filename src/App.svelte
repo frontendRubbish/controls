@@ -1,5 +1,6 @@
 <script lang="ts">
   import InputController from './InputController.svelte';
+  import Header from './Header.svelte';
   import Section from './Section.svelte';
   import Search from './Search.svelte';
   import ProductDisplay from './ProductDisplay.svelte';
@@ -7,6 +8,7 @@
 
 <main>
   <InputController />
+  <Header />
   <Section sectionIdx={0} title={'Suche'}>
     <Search sectionIdx={0} />
   </Section>
