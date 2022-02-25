@@ -104,8 +104,8 @@
   .keyboard {
     border: 1px solid white;
     position: absolute;
-    right: 10px;
-    top: 10px;
+    left: 50%;
+    top: 140px;
 
     &__row {
       display: flex;
